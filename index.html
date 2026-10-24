@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExamFlow 资料小程序 · AI 考培刷题，开发中</title>
+<meta name="description" content="ExamFlow 是一款开发中的微信考培刷题小程序：试卷自动切片入库、AI 变造命题、双盲校验、错题本与一键举一反三，题库已覆盖 16 个考种、1452 道题。">
+<meta name="author" content="ExamFlow Project">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ExamFlow 资料小程序">
+<meta property="og:title" content="ExamFlow 资料小程序 · AI 考培刷题，开发中">
+<meta property="og:description" content="试卷自动切片入库、AI 变造命题、双盲校验、错题本与一键举一反三——开发中的微信考培刷题小程序，题库已覆盖 16 个考种、1452 道题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ExamFlow 资料小程序 · AI 考培刷题，开发中">
+<meta name="twitter:description" content="试卷自动切片入库、AI 变造命题、双盲校验、错题本与一键举一反三——开发中的微信考培刷题小程序，题库已覆盖 16 个考种、1452 道题。">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "ExamFlow 资料小程序",
+  "alternateName": "ExamFlow Exam Practice Mini Program",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "WeChat Mini Program",
+  "description": "开发中的微信考培刷题小程序：试卷自动切片入库、AI 变造命题、双盲校验、错题本与一键举一反三。",
+  "inLanguage": ["zh-CN", "en"]
+}
+</script>
+<style>
+/* ============ 设计系统：沿用小程序 app.wxss 的品牌色板与卡片语言 ============ */
+:root{
+  --bg:#F5F6FA;
+  --card:#FFFFFF;
+  --ink:#101828;
+  --ink-2:#475467;
+  --ink-3:#98A2B3;
+  --line:#EAECF3;
+  --brand:#4F46E5;
+  --brand-2:#7C3AED;
+  --brand-deep:#312E81;
+  --brand-soft:#EEF2FF;
+  --ok:#12B76A;
+  --ok-soft:#E9F9F0;
+  --warn:#F59E0B;
+  --warn-soft:#FEF6E7;
+  --radius:20px;
+  --radius-s:12px;
+  --shadow-1:0 1px 2px rgba(16,24,40,.04),0 8px 24px rgba(16,24,40,.06);
+  --shadow-brand:0 10px 28px rgba(79,70,229,.28);
+  --font:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--ink);
+  font-size:16px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+/* 语言切换：两种语言都在 DOM 中，按根节点 data-lang 显隐 */
+html[data-lang="zh"] [data-lang="en"],
+html[data-lang="en"] [data-lang="zh"]{display:none !important}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+img{max-width:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+section{padding:76px 0;scroll-margin-top:72px}
+.kicker{
+  display:inline-block;
+  font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--brand);background:var(--brand-soft);
+  border-radius:999px;padding:6px 14px;margin-bottom:16px;
+}
+h2{font-size:clamp(26px,4vw,36px);line-height:1.25;letter-spacing:-.01em}
+.lede{color:var(--ink-2);max-width:720px;margin-top:14px;font-size:17px}
+.sec-head{margin-bottom:40px}
+
+/* ============ 顶部导航 ============ */
+.site-header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.86);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.header-inner{display:flex;align-items:center;gap:28px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
+.brand:hover{text-decoration:none}
+.brand-mark{
+  width:34px;height:34px;border-radius:10px;flex:none;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--brand) 0%,var(--brand-2) 100%);
+  color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;
+  box-shadow:var(--shadow-brand);
+}
+.brand-name{font-weight:700;font-size:17px;letter-spacing:-.01em}
+.brand-name small{color:var(--ink-3);font-weight:500;font-size:12px;margin-left:6px}
+.site-nav{display:flex;gap:22px;margin-left:auto}
+.site-nav a{color:var(--ink-2);font-size:14.5px;font-weight:500}
+.site-nav a:hover{color:var(--brand);text-decoration:none}
+.lang-btn{
+  margin-left:8px;flex:none;
+  font-family:var(--font);font-size:13.5px;font-weight:600;
+  color:var(--brand);background:#fff;
+  border:2px solid #D6DBF5;border-radius:999px;
+  padding:6px 16px;cursor:pointer;transition:all .15s ease;
+}
+.lang-btn:hover{border-color:var(--brand);box-shadow:0 2px 10px rgba(79,70,229,.15)}
+
+/* ============ Hero ============ */
+.hero{
+  position:relative;overflow:hidden;color:#fff;
+  background:linear-gradient(140deg,#1E1B4B 0%,#312E81 34%,#4F46E5 72%,#7C3AED 100%);
+  padding:88px 0 96px;
+}
+.hero::before{
+  content:"";position:absolute;width:560px;height:560px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.16) 0%,rgba(255,255,255,0) 62%);
+  top:-200px;right:-120px;pointer-events:none;
+}
+.hero::after{
+  content:"";position:absolute;width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,rgba(124,58,237,.5) 0%,rgba(124,58,237,0) 65%);
+  bottom:-180px;left:-140px;pointer-events:none;
+}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
+.status-pill{
+  display:inline-flex;align-items:center;gap:9px;
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);
+  border-radius:999px;padding:7px 16px;
+  font-size:13.5px;font-weight:500;letter-spacing:.02em;
+  margin-bottom:22px;backdrop-filter:blur(4px);
+}
+.status-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--warn);
+  box-shadow:0 0 0 0 rgba(245,158,11,.65);animation:pulse 2s infinite;flex:none;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(245,158,11,.65)}
+  70%{box-shadow:0 0 0 9px rgba(245,158,11,0)}
+  100%{box-shadow:0 0 0 0 rgba(245,158,11,0)}
+}
+.hero h1{
+  font-size:clamp(32px,5.2vw,52px);line-height:1.18;letter-spacing:-.02em;
+  font-weight:800;margin-bottom:20px;
+}
+.hero h1 .grad{
+  background:linear-gradient(90deg,#C7D2FE 0%,#F0ABFC 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero .sub{
+  color:rgba(255,255,255,.82);font-size:17px;max-width:560px;margin-bottom:34px;
+}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+.btn{
+  display:inline-block;border-radius:14px;font-weight:600;font-size:15.5px;
+  padding:13px 26px;transition:all .15s ease;cursor:pointer;text-decoration:none;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--brand) 0%,var(--brand-2) 100%);
+  color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.25);
+}
+.btn-primary:hover{text-decoration:none;transform:translateY(-2px);box-shadow:0 14px 32px rgba(0,0,0,.3)}
+.btn-ghost{
+  background:rgba(255,255,255,.1);color:#fff;
+  border:1.5px solid rgba(255,255,255,.4);
+}
+.btn-ghost:hover{text-decoration:none;background:rgba(255,255,255,.18)}
+.hero-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+  margin-top:44px;max-width:560px;
+}
+.stat{
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+  border-radius:16px;padding:14px 12px;text-align:center;backdrop-filter:blur(4px);
+}
+.stat b{display:block;font-size:24px;letter-spacing:-.02em;line-height:1.2}
+.stat span{display:block;font-size:12px;color:rgba(255,255,255,.72);margin-top:3px}
+
+/* 手机形态示意（纯 CSS 绘制，非截图） */
+.phone-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.phone{
+  width:288px;border-radius:42px;padding:10px;
+  background:linear-gradient(160deg,#1B1850 0%,#0F0D2E 100%);
+  box-shadow:0 30px 70px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.14);
+}
+.phone-screen{
+  background:var(--bg);border-radius:33px;overflow:hidden;
+}
+.ps-status{display:flex;justify-content:space-between;padding:10px 18px 6px;font-size:10.5px;color:var(--ink-3)}
+.ps-head{
+  padding:12px 16px 14px;
+  background:linear-gradient(135deg,var(--brand) 0%,var(--brand-2) 100%);
+  color:#fff;
+}
+.ps-head b{font-size:15px}
+.ps-head small{display:block;font-size:10px;opacity:.8;margin-top:2px}
+.ps-chips{display:flex;flex-wrap:wrap;gap:6px;padding:12px 14px 4px}
+.ps-chip{
+  font-size:10px;color:var(--brand);background:var(--brand-soft);
+  border-radius:999px;padding:4px 10px;font-weight:500;
+}
+.ps-chip.on{background:var(--brand);color:#fff}
+.ps-modes{padding:10px 14px 16px;display:grid;gap:8px}
+.ps-mode{
+  background:#fff;border:1px solid var(--line);border-radius:14px;
+  padding:10px 12px;display:flex;align-items:center;gap:10px;
+  box-shadow:0 1px 2px rgba(16,24,40,.05);
+}
+.ps-mode .em{font-size:17px}
+.ps-mode b{display:block;font-size:12px;line-height:1.35}
+.ps-mode small{display:block;font-size:9.5px;color:var(--ink-3);line-height:1.3}
+.ps-derive{
+  margin:0 14px 16px;border-radius:14px;padding:9px 12px;text-align:center;
+  background:linear-gradient(135deg,var(--brand) 0%,var(--brand-2) 100%);
+  color:#fff;font-size:11.5px;font-weight:600;
+}
+.phone-cap{font-size:12px;color:rgba(255,255,255,.6);text-align:center;max-width:300px;line-height:1.6}
+
+/* ============ 特性卡片 ============ */
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feature{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:26px 24px;box-shadow:var(--shadow-1);
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.feature:hover{transform:translateY(-4px);box-shadow:0 4px 8px rgba(16,24,40,.05),0 18px 40px rgba(16,24,40,.1)}
+.feature .em{
+  width:46px;height:46px;border-radius:14px;font-size:22px;
+  display:flex;align-items:center;justify-content:center;margin-bottom:16px;
+  background:var(--brand-soft);
+}
+.feature.hot .em{background:linear-gradient(135deg,var(--brand) 0%,var(--brand-2) 100%)}
+.feature h3{font-size:18px;letter-spacing:-.01em;margin-bottom:8px}
+.feature p{color:var(--ink-2);font-size:14.5px}
+.feature .mini-tag{
+  display:inline-block;margin-top:14px;font-size:11.5px;font-weight:600;
+  color:var(--warn);background:var(--warn-soft);border-radius:999px;padding:4px 11px;
+}
+.feature .mini-tag.ok{color:var(--ok);background:var(--ok-soft)}
+
+/* ============ 流水线 ============ */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:step}
+.step{
+  position:relative;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius);padding:26px 22px;box-shadow:var(--shadow-1);
+}
+.step-no{
+  width:38px;height:38px;border-radius:12px;margin-bottom:14px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--brand) 0%,var(--brand-2) 100%);
+  color:#fff;font-weight:700;font-size:16px;
+}
+.step h3{font-size:16.5px;margin-bottom:8px}
+.step p{color:var(--ink-2);font-size:13.8px}
+.step .code{
+  display:inline-block;margin-top:12px;font-size:11.5px;font-weight:600;
+  font-family:ui-monospace,SFMono-Regular,Consolas,"Courier New",monospace;
+  color:var(--brand);background:var(--brand-soft);
+  border-radius:6px;padding:2px 8px;
+}
+.mode-note{
+  margin-top:24px;background:var(--brand-deep);color:rgba(255,255,255,.88);
+  border-radius:var(--radius);padding:26px 28px;
+  display:grid;grid-template-columns:200px 1fr;gap:22px;align-items:start;
+}
+.mode-note h3{color:#fff;font-size:17px}
+.mode-note p{font-size:14.5px}
+.mode-note .pill-line{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.mode-note .pill{
+  font-size:12px;border:1px solid rgba(255,255,255,.3);border-radius:999px;
+  padding:3px 11px;color:#fff;
+}
+
+/* ============ 题库样例 ============ */
+.bank-light{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.quiz-card{
+  max-width:760px;margin:0 auto;background:var(--card);
+  border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow-1);
+  overflow:hidden;
+}
+.quiz-top{
+  padding:18px 26px;border-bottom:1px solid var(--line);
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+}
+.tag{
+  display:inline-block;font-size:12px;font-weight:600;line-height:1;
+  padding:6px 12px;border-radius:999px;
+}
+.tag-type{background:var(--brand-soft);color:var(--brand)}
+.tag-subject{background:var(--ok-soft);color:var(--ok)}
+.tag-kp{background:#FFF6E9;color:#B54708}
+.quiz-body{padding:26px}
+.quiz-stem{font-size:17px;line-height:1.8;font-weight:500}
+.quiz-options{display:grid;gap:10px;margin-top:20px}
+.opt{
+  border:1.5px solid var(--line);border-radius:12px;padding:12px 16px;
+  font-size:15px;display:flex;gap:10px;align-items:baseline;background:#FBFBFE;
+}
+.opt b{color:var(--ink-3);font-weight:700;flex:none}
+.quiz-reveal{margin-top:22px}
+.quiz-reveal summary{
+  list-style:none;cursor:pointer;user-select:none;
+  display:inline-block;font-size:14px;font-weight:600;color:var(--brand);
+  border:2px solid #D6DBF5;border-radius:12px;padding:10px 20px;
+  transition:all .15s ease;
+}
+.quiz-reveal summary::-webkit-details-marker{display:none}
+.quiz-reveal summary:hover{border-color:var(--brand);box-shadow:0 2px 10px rgba(79,70,229,.15)}
+.quiz-answer{
+  margin-top:18px;background:var(--ok-soft);border-radius:14px;padding:18px 20px;
+  font-size:14.5px;color:#0E6B3F;
+}
+.quiz-answer b{display:block;margin-bottom:6px;font-size:15px}
+.quiz-cap{
+  max-width:760px;margin:18px auto 0;font-size:13px;color:var(--ink-3);text-align:center;line-height:1.7;
+}
+
+/* ============ 题库数据 ============ */
+.type-pills{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:34px}
+.type-pill{
+  background:var(--card);border:1px solid var(--line);border-radius:999px;
+  padding:8px 18px;font-size:14px;box-shadow:var(--shadow-1);
+}
+.type-pill b{color:var(--brand)}
+.bank-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:start}
+.bars{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:24px 24px 16px;box-shadow:var(--shadow-1);
+}
+.bars h3{font-size:15.5px;margin-bottom:18px}
+.bar-row{
+  display:grid;grid-template-columns:158px 1fr 52px;gap:12px;align-items:center;
+  padding:5.5px 0;
+}
+.bar-name{font-size:13px;line-height:1.4}
+.bar-name .gloss{color:var(--ink-3);font-size:11px;display:block}
+.bar-track{background:var(--bg);border-radius:999px;height:10px;overflow:hidden}
+.bar-track i{
+  display:block;height:100%;border-radius:999px;min-width:5px;
+  background:linear-gradient(90deg,var(--brand) 0%,var(--brand-2) 100%);
+}
+.bar-count{font-size:12.5px;color:var(--ink-2);text-align:right;font-variant-numeric:tabular-nums}
+.bars-cap{font-size:12px;color:var(--ink-3);margin-top:14px;line-height:1.6}
+.src-cards{display:grid;gap:14px}
+.src{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:18px 20px;box-shadow:var(--shadow-1);
+}
+.src h4{font-size:15px;margin-bottom:5px}
+.src h4 span{color:var(--ink-3);font-weight:500;font-size:12.5px;margin-left:6px}
+.src p{font-size:13.5px;color:var(--ink-2)}
+.cat-chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px}
+.cat-chip{
+  font-size:13px;font-weight:500;color:var(--ink-2);
+  background:var(--card);border:1px solid var(--line);
+  border-radius:999px;padding:7px 15px;box-shadow:var(--shadow-1);
+}
+.cat-chip.first{background:var(--brand-soft);border-color:transparent;color:var(--brand);font-weight:600}
+
+/* ============ 开发状态 ============ */
+.status-banner{
+  display:flex;gap:14px;align-items:flex-start;
+  background:var(--warn-soft);border:1px solid #F5D999;
+  border-radius:var(--radius);padding:20px 24px;margin-bottom:40px;
+  font-size:14.5px;color:#7A4B05;
+}
+.status-banner .em{font-size:20px;flex:none;line-height:1.5}
+.status-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:start}
+.timeline{position:relative;padding-left:26px}
+.timeline::before{
+  content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;
+  background:linear-gradient(180deg,var(--brand) 0%,var(--brand-2) 60%,#E4E1FB 100%);
+  border-radius:2px;
+}
+.tl-item{position:relative;padding-bottom:26px}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{
+  content:"";position:absolute;left:-25px;top:6px;width:12px;height:12px;
+  border-radius:50%;background:#fff;border:3px solid var(--brand);
+}
+.tl-item.now::before{border-color:var(--warn);animation:pulse 2s infinite}
+.tl-date{
+  display:inline-block;font-size:12px;font-weight:600;color:var(--brand);
+  background:var(--brand-soft);border-radius:6px;padding:2px 9px;
+  font-variant-numeric:tabular-nums;margin-bottom:5px;
+}
+.tl-item.now .tl-date{color:#B45309;background:var(--warn-soft)}
+.tl-item h4{font-size:15.5px;margin-bottom:3px}
+.tl-item p{font-size:13.5px;color:var(--ink-2)}
+.plan-list,.bound-list{display:grid;gap:14px}
+.plan{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:17px 20px;box-shadow:var(--shadow-1);
+}
+.plan h4{font-size:15px;margin-bottom:4px}
+.plan p{font-size:13.5px;color:var(--ink-2)}
+.plan .ico{margin-right:8px}
+.bound{
+  background:#FBFBFE;border:1px dashed #D5D9E8;border-radius:16px;padding:16px 20px;
+  font-size:13.5px;color:var(--ink-2);
+}
+.bound b{color:var(--ink);display:block;margin-bottom:3px;font-size:14.5px}
+.side-h{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:26px 0 14px}
+.side-h:first-child{margin-top:0}
+
+/* ============ 技术栈 ============ */
+.tech{padding-top:0}
+.tech-row{margin-bottom:18px}
+.tech-row h4{font-size:14px;color:var(--ink-2);margin-bottom:10px;font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:9px}
+.chip{
+  font-size:13px;color:var(--ink);background:var(--card);
+  border:1px solid var(--line);border-radius:999px;padding:6px 14px;
+  font-family:ui-monospace,SFMono-Regular,Consolas,"Courier New",monospace;
+  font-size:12.5px;box-shadow:var(--shadow-1);
+}
+
+/* ============ 页脚 ============ */
+footer{background:#101828;color:#98A2B3;padding:52px 0 40px}
+.foot-inner{text-align:center}
+.foot-brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px}
+.foot-brand .brand-mark{width:30px;height:30px;border-radius:9px;font-size:12px}
+.foot-brand b{color:#fff;font-size:17px}
+.foot-brand small{color:#667085;font-size:12px}
+.foot-desc{max-width:560px;margin:0 auto 26px;font-size:13.5px;line-height:1.8}
+.foot-made{
+  color:#E0E2EA;font-size:14px;font-weight:600;letter-spacing:.02em;
+  border-top:1px solid #1F2937;padding-top:24px;
+}
+
+/* ============ 进场动画（仅 JS 可用时） ============ */
+html.js .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+html.js .reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html.js .reveal{opacity:1;transform:none;transition:none}
+  html{scroll-behavior:auto}
+  .status-dot,.tl-item.now::before{animation:none}
+}
+
+/* ============ 响应式 ============ */
+@media (max-width:960px){
+  .hero .wrap{grid-template-columns:1fr;gap:48px}
+  .phone-wrap{order:2}
+  .hero-stats{max-width:none}
+  .grid-3{grid-template-columns:repeat(2,1fr)}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .mode-note{grid-template-columns:1fr}
+  .bank-grid{grid-template-columns:1fr}
+  .status-grid{grid-template-columns:1fr}
+}
+@media (max-width:720px){
+  .site-nav{display:none}
+  section{padding:56px 0}
+  .hero{padding:64px 0 72px}
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .grid-3{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .bar-row{grid-template-columns:120px 1fr 44px;gap:8px}
+  .bar-name .gloss{display:none}
+  .quiz-body{padding:20px}
+  .quiz-top{padding:14px 20px}
+}
+</style>
+</head>
+<body id="top">
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top" aria-label="ExamFlow">
+      <span class="brand-mark">EF</span>
+      <span class="brand-name">ExamFlow<small><span data-lang="zh">资料小程序</span><span data-lang="en">Mini Program</span></small></span>
+    </a>
+    <nav class="site-nav" aria-label="主导航 / Main navigation">
+      <a href="#features"><span data-lang="zh">特性</span><span data-lang="en">Features</span></a>
+      <a href="#pipeline"><span data-lang="zh">智能流水线</span><span data-lang="en">Pipeline</span></a>
+      <a href="#bank"><span data-lang="zh">题库样例</span><span data-lang="en">Bank</span></a>
+      <a href="#status"><span data-lang="zh">开发状态</span><span data-lang="en">Status</span></a>
+    </nav>
+    <button class="lang-btn" id="langToggle" type="button" onclick="switchLang()" aria-label="Switch to English">EN</button>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= Hero ================= -->
+<section class="hero" aria-label="项目简介">
+  <div class="wrap">
+    <div>
+      <p class="status-pill">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span data-lang="zh">微信小程序 · 开发中 · 敬请期待</span>
+        <span data-lang="en">WeChat Mini Program · In Development · Coming Soon</span>
+      </p>
+      <h1>
+        <span data-lang="zh">把每一份真题，<br>变成<span class="grad">会生长</span>的题库。</span>
+        <span data-lang="en">Turn every past paper<br>into a question bank that <span class="grad">grows</span>.</span>
+      </h1>
+      <p class="sub">
+        <span data-lang="zh">ExamFlow 是一款正在开发中的微信考培刷题小程序：试卷自动切片入库，AI 变造命题、双盲校验后进入题库；再配合错题本与「一键举一反三」，把刷过的每一题都吃透。</span>
+        <span data-lang="en">ExamFlow is a WeChat mini program for exam practice, now in development: past papers are sliced into a structured bank automatically, AI-derived questions pass a double-blind check before entering, and a wrong-question book plus one-tap similar-question drills help you truly master every question you answer.</span>
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#features"><span data-lang="zh">看看它能做什么 ↓</span><span data-lang="en">See what it does ↓</span></a>
+        <a class="btn btn-ghost" href="#status"><span data-lang="zh">开发状态</span><span data-lang="en">Dev status</span></a>
+      </div>
+      <div class="hero-stats" role="list" aria-label="关键数据 / Key figures">
+        <div class="stat" role="listitem"><b>1452</b><span><span data-lang="zh">题库题目</span><span data-lang="en">questions in bank</span></span></div>
+        <div class="stat" role="listitem"><b>16</b><span><span data-lang="zh">覆盖考种</span><span data-lang="en">exam types</span></span></div>
+        <div class="stat" role="listitem"><b>3</b><span><span data-lang="zh">练习模式</span><span data-lang="en">practice modes</span></span></div>
+        <div class="stat" role="listitem"><b>11</b><span><span data-lang="zh">后端 API 接口</span><span data-lang="en">backend API endpoints</span></span></div>
+      </div>
+    </div>
+    <div class="phone-wrap">
+      <div class="phone" role="img" aria-label="小程序界面形态示意 / Stylized sketch of the mini program UI">
+        <div class="phone-screen">
+          <div class="ps-status"><span>9:41</span><span data-lang="zh">微信 · 开发版</span><span data-lang="en">WeChat · Dev build</span></div>
+          <div class="ps-head">
+            <b>ExamFlow</b>
+            <small><span data-lang="zh">选择考种，开始刷题</span><span data-lang="en">Pick an exam, start drilling</span></small>
+          </div>
+          <div class="ps-chips" aria-hidden="true">
+            <span class="ps-chip on" data-lang="zh">全部</span><span class="ps-chip on" data-lang="en">All</span>
+            <span class="ps-chip" data-lang="zh">考研</span><span class="ps-chip" data-lang="en">Postgrad</span>
+            <span class="ps-chip" data-lang="zh">四六级</span><span class="ps-chip" data-lang="en">CET-4/6</span>
+            <span class="ps-chip" data-lang="zh">考公考编</span><span class="ps-chip" data-lang="en">Civil svc</span>
+            <span class="ps-chip" data-lang="zh">高考</span><span class="ps-chip" data-lang="en">Gaokao</span>
+            <span class="ps-chip" data-lang="zh">期末冲刺</span><span class="ps-chip" data-lang="en">Finals</span>
+            <span class="ps-chip" data-lang="zh">考证</span><span class="ps-chip" data-lang="en">Certificates</span>
+          </div>
+          <div class="ps-modes">
+            <div class="ps-mode">
+              <span class="em" aria-hidden="true">📝</span>
+              <span><b><span data-lang="zh">历年真题演练</span><span data-lang="en">Past-paper drills</span></b>
+              <small><span data-lang="zh">随机组卷 10–20 题</span><span data-lang="en">10–20 random questions</span></small></span>
+            </div>
+            <div class="ps-mode">
+              <span class="em" aria-hidden="true">🎯</span>
+              <span><b><span data-lang="zh">考点专项特训</span><span data-lang="en">Knowledge-point training</span></b>
+              <small><span data-lang="zh">按知识点跨考种检索</span><span data-lang="en">Cross-type search by topic</span></small></span>
+            </div>
+            <div class="ps-mode">
+              <span class="em" aria-hidden="true">📕</span>
+              <span><b><span data-lang="zh">我的错题本</span><span data-lang="en">Wrong-question book</span></b>
+              <small><span data-lang="zh">待攻克 / 已掌握 / 清零重练</span><span data-lang="en">Pending / mastered / reset</span></small></span>
+            </div>
+          </div>
+          <div class="ps-derive">
+            <span data-lang="zh">🔥 一键举一反三：练练衍生同类题</span>
+            <span data-lang="en">🔥 One tap: drill AI-derived variants</span>
+          </div>
+        </div>
+      </div>
+      <p class="phone-cap">
+        <span data-lang="zh">产品形态示意（纯 CSS 绘制）· 实际界面以正式发布版本为准</span>
+        <span data-lang="en">Stylized UI sketch (pure CSS) · the released app may differ</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 特性 ================= -->
+<section id="features" aria-labelledby="features-h">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker"><span data-lang="zh">特性</span><span data-lang="en">Features</span></span>
+      <h2 id="features-h">
+        <span data-lang="zh">三大练习模式，加一个 AI 杀手锏</span>
+        <span data-lang="en">Three practice modes and one AI ace</span>
+      </h2>
+      <p class="lede">
+        <span data-lang="zh">小程序端共三个页面：首页考种导航、卡片式刷题、错题本。围绕它们，是这些已经实现的能力（在本地联调中全部可跑通）。</span>
+        <span data-lang="en">The mini program has three pages — exam-type home, card-based quiz, wrong-question book — and these capabilities, all working in local integration today.</span>
+      </p>
+    </div>
+    <div class="grid-3">
+      <article class="feature reveal">
+        <div class="em" aria-hidden="true">📝</div>
+        <h3><span data-lang="zh">历年真题演练</span><span data-lang="en">Past-paper drills</span></h3>
+        <p><span data-lang="zh">按考种随机抽 10–20 题组卷；卡片式作答，单选 / 多选 / 判断实时判分（多选须集合完全一致），交卷即得得分汇总与正确率。</span>
+        <span data-lang="en">Pull 10–20 random questions per exam type and answer card by card. Single, multiple and true/false questions are graded instantly — multiple-choice answers must match exactly as a set — with a score summary when you finish.</span></p>
+      </article>
+      <article class="feature reveal">
+        <div class="em" aria-hidden="true">🎯</div>
+        <h3><span data-lang="zh">考点专项特训</span><span data-lang="en">Knowledge-point training</span></h3>
+        <p><span data-lang="zh">输入知识点关键词，跨考种检索同考点题目集中突破；每道题都带考点标签，薄弱点逐个击破。</span>
+        <span data-lang="en">Enter a knowledge-point keyword to pull matching questions across every exam type. Each question carries its knowledge-point tag, so weak spots get picked off one by one.</span></p>
+      </article>
+      <article class="feature reveal">
+        <div class="em" aria-hidden="true">📕</div>
+        <h3><span data-lang="zh">我的错题本</span><span data-lang="en">Wrong-question book</span></h3>
+        <p><span data-lang="zh">答错自动进本（复习次数 +1），答对自动置为已掌握；「待攻克 / 已掌握 / 全部」三态过滤，支持去重练与一键清零重练。</span>
+        <span data-lang="en">Wrong answers file themselves in (review count +1) and correct ones mark questions as mastered. Filter by pending, mastered or all, then de-duplicate and reset the whole book for a fresh round.</span></p>
+      </article>
+      <article class="feature hot reveal">
+        <div class="em" aria-hidden="true">🔥</div>
+        <h3><span data-lang="zh">一键举一反三</span><span data-lang="en">One-tap derived questions</span></h3>
+        <p><span data-lang="zh">对任意一题，AI 提取核心考点、更换背景场景、加入强干扰项，实时变造出同类新题；无库存时后台异步生成（HTTP 202 + 前端每 2 秒轮询），做完原题立刻能练同类。</span>
+        <span data-lang="en">For any question, the AI extracts the core knowledge point, swaps the scenario and adds strong distractors to mint fresh variants. If none are in stock, the backend generates them asynchronously (HTTP 202 + 2-second client polling), so the follow-up drill is ready right after you finish the original.</span></p>
+        <span class="mini-tag"><span data-lang="zh">核心亮点</span><span data-lang="en">The highlight</span></span>
+      </article>
+      <article class="feature reveal">
+        <div class="em" aria-hidden="true">📄</div>
+        <h3><span data-lang="zh">PDF 试卷导出</span><span data-lang="en">PDF paper export</span></h3>
+        <p><span data-lang="zh">把当前考种随机抽 20 题生成可打印 PDF：题目在前、答案与解析在后，中文字体内嵌，可在微信里下载、预览与转发。</span>
+        <span data-lang="en">Export 20 random questions of the current exam type as a printable PDF — questions first, answers and analyses at the back, embedded Chinese font — downloadable, previewable and shareable inside WeChat.</span></p>
+        <span class="mini-tag ok"><span data-lang="zh">可打印 · 可转发</span><span data-lang="en">Printable &amp; shareable</span></span>
+      </article>
+      <article class="feature reveal">
+        <div class="em" aria-hidden="true">🧮</div>
+        <h3><span data-lang="zh">公式不再乱码</span><span data-lang="en">Formulas that just render</span></h3>
+        <p><span data-lang="zh">题干与详解完整渲染 Markdown 排版；LaTeX 数学命令先离线转换为 Unicode 数学符号（√x、½、R₁ × R₂…），零外网依赖，真机与审核都稳，异常时自动回退纯文本。</span>
+        <span data-lang="en">Stems and analyses render full Markdown, and LaTeX math is converted offline into Unicode symbols (√x, ½, R₁ × R₂…) before rendering — zero network dependency, safe on real devices and in review, with automatic fallback to plain text.</span></p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 智能流水线 ================= -->
+<section id="pipeline" aria-labelledby="pipeline-h">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker"><span data-lang="zh">智能流水线</span><span data-lang="en">The Pipeline</span></span>
+      <h2 id="pipeline-h">
+        <span data-lang="zh">一套全自动的「真题 → 题库」流水线</span>
+        <span data-lang="en">A fully automated paper-to-bank pipeline</span>
+      </h2>
+      <p class="lede">
+        <span data-lang="zh">从试卷文件到可刷的题，中间没有人工搬运。FastAPI 后端用三个 Agent 串起切片、命题与盲测校验。</span>
+        <span data-lang="en">From raw paper files to drillable questions with no manual copywork in between. A FastAPI backend chains three agents for slicing, deriving and blind verification.</span>
+      </p>
+    </div>
+    <div class="steps">
+      <article class="step reveal">
+        <div class="step-no" aria-hidden="true">1</div>
+        <h3><span data-lang="zh">切片入库</span><span data-lang="en">Slice &amp; import</span></h3>
+        <p><span data-lang="zh">上传 .pdf / .txt / .md 试卷，自动清洗页眉页脚与干扰字符；LLM 强制输出严格 JSON（json-repair 降级 + 最多重试 3 次），经 Pydantic 校验后入库为 original 真题。</span>
+        <span data-lang="en">Upload a paper in .pdf / .txt / .md; headers, footers and noise are scrubbed automatically. The LLM is forced to emit strict JSON (json-repair fallback, up to 3 retries), validated by Pydantic, then stored as an original question.</span></p>
+        <span class="code">POST /api/pipeline/extract</span>
+      </article>
+      <article class="step reveal">
+        <div class="step-no" aria-hidden="true">2</div>
+        <h3><span data-lang="zh">变造命题</span><span data-lang="en">Derive</span></h3>
+        <p><span data-lang="zh">命题 Agent 提取原题核心考点，更换背景场景、保留考点、加入强干扰项，生成 3–5 道「同考点、不同皮」的高仿衍生题。</span>
+        <span data-lang="en">The deriver agent extracts the original's core knowledge point, swaps the scenario, keeps the point and adds strong distractors to create 3–5 look-alike questions.</span></p>
+        <span class="code">POST /api/pipeline/derive</span>
+      </article>
+      <article class="step reveal">
+        <div class="step-no" aria-hidden="true">3</div>
+        <h3><span data-lang="zh">双盲自测</span><span data-lang="en">Double-blind check</span></h3>
+        <p><span data-lang="zh">盲测 Agent 不看标准答案、独立作答；与标准答案一致才允许入库（source_type = derived 并记 parent_id），不一致则弃用重来，整体最多 3 轮。</span>
+        <span data-lang="en">A separate blind-tester agent answers without ever seeing the key. Only questions whose answer agrees with the official one enter the bank as derived (with parent_id recorded); the rest are discarded and retried, up to 3 rounds.</span></p>
+        <span class="code">blind_tester agent</span>
+      </article>
+      <article class="step reveal">
+        <div class="step-no" aria-hidden="true">4</div>
+        <h3><span data-lang="zh">组卷与闭环</span><span data-lang="en">Drill &amp; close the loop</span></h3>
+        <p><span data-lang="zh">随机组卷接口按考种 / 知识点抽题，交卷判分并同步错题本；衍生题无库存时返回 202 后台生成，前端轮询取题，练完即闭环。</span>
+        <span data-lang="en">The random-paper API draws by exam type or knowledge point, grading on submit and syncing the wrong book; missing derived questions trigger a 202 background job the client polls — closing the loop right after practice.</span></p>
+        <span class="code">GET /api/exams/random</span>
+      </article>
+    </div>
+    <div class="mode-note reveal">
+      <div>
+        <h3><span data-lang="zh">两种运行模式</span><span data-lang="en">Two operating modes</span></h3>
+        <div class="pill-line">
+          <span class="pill" data-lang="zh">Mock：零 Key 跑通全链路</span><span class="pill" data-lang="en">Mock: full loop, zero keys</span>
+          <span class="pill" data-lang="zh">真实：OpenAI 兼容端点</span><span class="pill" data-lang="en">Real: OpenAI-compatible APIs</span>
+        </div>
+      </div>
+      <p>
+        <span data-lang="zh"><b>Mock 模式</b>（LLM_MOCK=true）不需要任何 API Key，就能完整跑通切片、衍生命题与盲测闭环，适合演示与自动化测试；<b>真实模式</b>接入任意 OpenAI 兼容端点（DeepSeek / Qwen / Moonshot 等），带 60 秒超时与指数退避重试，未配置 Key 时返回清晰的中文错误而非崩溃。</span>
+        <span data-lang="en"><b>Mock mode</b> (LLM_MOCK=true) runs the entire pipeline — slicing, deriving, blind testing — with zero API keys, ideal for demos and automated tests. <b>Real mode</b> plugs into any OpenAI-compatible endpoint (DeepSeek / Qwen / Moonshot…) with a 60-second timeout, exponential-backoff retries, and a clear Chinese error message instead of a crash when the key is missing.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 题库样例 + 题库现状 ================= -->
+<section id="bank" class="bank-light" aria-labelledby="bank-h">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker"><span data-lang="zh">题库样例</span><span data-lang="en">Sample &amp; Bank</span></span>
+      <h2 id="bank-h">
+        <span data-lang="zh">从当前题库里，抽一道给你看</span>
+        <span data-lang="en">A real question, pulled from the bank</span>
+      </h2>
+      <p class="lede">
+        <span data-lang="zh">下面这道单选题及其解析，逐字来自当前题库（GAOKAO-Bench 高考数学真题，题目 ID 1355，经切片流水线入库）。LaTeX 源文本已按小程序同款规则离线转换为 Unicode 数学符号——你看到的就是小程序里的样子。</span>
+        <span data-lang="en">The question and analysis below come verbatim from the current bank (GAOKAO-Bench real gaokao math, question ID 1355, imported via the slicing pipeline). The LaTeX source has been converted offline to Unicode math symbols exactly as the mini program renders it.</span>
+      </p>
+    </div>
+
+    <div class="quiz-card reveal">
+      <div class="quiz-top">
+        <span class="tag tag-type"><span data-lang="zh">单选题</span><span data-lang="en">Single choice</span></span>
+        <span class="tag tag-subject">高考数学真题</span>
+        <span class="tag tag-kp"><span data-lang="zh">考点：综合知识</span><span data-lang="en">Point: general</span></span>
+      </div>
+      <div class="quiz-body">
+        <p class="quiz-stem">
+          <span data-lang="zh">（5 分）曲线 <b>y = x / (x + 2)</b> 在点 (−1, −1) 处的切线方程为（&nbsp;&nbsp;&nbsp;）</span>
+          <span data-lang="en">(5 pts) The tangent line to the curve <b>y = x / (x + 2)</b> at the point (−1, −1) is (&nbsp;&nbsp;&nbsp;)</span>
+        </p>
+        <div class="quiz-options">
+          <div class="opt"><b>A.</b><span>y = 2x + 1</span></div>
+          <div class="opt"><b>B.</b><span>y = 2x − 1</span></div>
+          <div class="opt"><b>C.</b><span>y = −2x − 3</span></div>
+          <div class="opt"><b>D.</b><span>y = −2x − 2</span></div>
+        </div>
+        <details class="quiz-reveal">
+          <summary><span data-lang="zh">查看答案与解析</span><span data-lang="en">Reveal answer &amp; analysis</span></summary>
+          <div class="quiz-answer">
+            <b><span data-lang="zh">正确答案：A</span><span data-lang="en">Correct answer: A</span></b>
+            <span data-lang="zh">解析：∵ y = x / (x + 2)，∴ y′ = 2 / (x + 2)²；切线斜率 k = y′|<sub>x = −1</sub> = 2。切线方程为 y + 1 = 2 × (x + 1)，即 y = 2x + 1。故选 A。</span>
+            <span data-lang="en">Analysis: y = x / (x + 2) gives y′ = 2 / (x + 2)², so the slope at x = −1 is k = 2. The tangent is y + 1 = 2(x + 1), i.e. y = 2x + 1. Answer: A.</span>
+          </div>
+        </details>
+      </div>
+    </div>
+    <p class="quiz-cap">
+      <span data-lang="zh">在小程序里，这道题答错会自动进入错题本，并能一键举一反三生成「同考点、换场景」的新题。</span>
+      <span data-lang="en">In the mini program, a wrong answer files this question into the wrong book, and one tap derives fresh questions with the same knowledge point in a new scenario.</span>
+    </p>
+
+    <div class="sec-head reveal" style="margin-top:72px">
+      <span class="kicker"><span data-lang="zh">题库现状</span><span data-lang="en">Bank today</span></span>
+      <h2>
+        <span data-lang="zh">16 个考种，1452 道题</span>
+        <span data-lang="en">16 exam types, 1,452 questions</span>
+      </h2>
+      <p class="lede">
+        <span data-lang="zh">以下数字直接读取自本地题库（2026-10-24 实测），其中 3 道为已通过双盲校验的 AI 衍生题；题库随导入持续增长。</span>
+        <span data-lang="en">Figures below are read directly from the local bank (measured 2026-10-24); 3 of them are AI-derived questions that passed the double-blind check, and the bank keeps growing with every import.</span>
+      </p>
+    </div>
+
+    <div class="type-pills reveal">
+      <span class="type-pill"><span data-lang="zh">单选题</span><span data-lang="en">Single choice</span> <b>1418</b></span>
+      <span class="type-pill"><span data-lang="zh">多选题</span><span data-lang="en">Multiple choice</span> <b>28</b></span>
+      <span class="type-pill"><span data-lang="zh">判断题</span><span data-lang="en">True / false</span> <b>6</b></span>
+    </div>
+
+    <div class="bank-grid">
+      <div class="bars reveal" aria-label="各考种题量 / Questions per exam type">
+        <h3><span data-lang="zh">各考种题量（共 16 个）</span><span data-lang="en">Questions per exam type (16 in all)</span></h3>
+        <div class="bar-row">
+          <span class="bar-name">行测逻辑真题<span class="gloss">Civil-service logic</span></span>
+          <span class="bar-track"><i style="width:100%"></i></span><span class="bar-count">1039</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-name">考研政治<span class="gloss">Postgrad politics</span></span>
+          <span class="bar-track"><i style="width:5%"></i></span><span class="bar-count">52</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-name">高等数学<span class="gloss">Calculus</span></span>
+          <span class="bar-track"><i style="width:4.8%"></i></span><span class="bar-count">50</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-name">高考数学真题<span class="gloss">Gaokao math</span></span>
+          <span class="bar-track"><i style="width:4.8%"></i></span><span class="bar-count">50</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-name">高考物理真题<span class="gloss">Gaokao physics</span></span>
+          <span class="bar-track"><i style="width:4.8%"></i></span><span class="bar-count">50</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-name">大学物理<span class="gloss">College physics</span></span>
+          <span class="bar-track"><i style="width:3.8%"></i></span><span class="bar-count">40</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-name">机器学习<span class="gloss">Machine learning</span></span>
+          <span class="bar-track"><i style="width:3.8%"></i></span><span class="bar-count">40</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-name">计算机综合<span class="gloss">CS fundamentals</span></span>
+          <span class="bar-track"><i style="width:3.8%"></i></span><span class="bar-count">40</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-name">软考架构师<span class="gloss">Software architect exam</span></span>
+          <span class="bar-track"><i style="width:2.5%"></i></span><span class="bar-count">26</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-name">行测<span class="gloss">Civil-service aptitude</span></span>
+          <span class="bar-track"><i style="width:1.3%"></i></span><span class="bar-count">14</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-name">大学生竞赛<span class="gloss">Student contests</span></span>
+          <span class="bar-track"><i style="width:1%"></i></span><span class="bar-count">10</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-name">数据结构<span class="gloss">Data structures</span></span>
+          <span class="bar-track"><i style="width:1%"></i></span><span class="bar-count">10</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-name">考研数学<span class="gloss">Postgrad math</span></span>
+          <span class="bar-track"><i style="width:1%"></i></span><span class="bar-count">10</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-name">考研英语<span class="gloss">Postgrad English</span></span>
+          <span class="bar-track"><i style="width:1%"></i></span><span class="bar-count">10</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-name">英语四六级<span class="gloss">CET-4 / CET-6</span></span>
+          <span class="bar-track"><i style="width:1%"></i></span><span class="bar-count">10</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-name">导入真题<span class="gloss">Manual import</span></span>
+          <span class="bar-track"><i style="width:.1%"></i></span><span class="bar-count">1</span>
+        </div>
+        <p class="bars-cap">
+          <span data-lang="zh">条长按题量线性缩放（最大考种 1039 题为满格）；考种名称以题库原始记录展示。</span>
+          <span data-lang="en">Bar length scales linearly with count (the largest type, 1,039 questions, fills the track); exam-type names are shown as stored in the bank.</span>
+        </p>
+      </div>
+
+      <div class="src-cards reveal">
+        <article class="src">
+          <h4>LogiQA<span>GitHub 开源数据集</span></h4>
+          <p><span data-lang="zh">公务员行测逻辑推理真题数据集（约 8700 题），已写好转换器接通并导入 1000+ 题。</span>
+          <span data-lang="en">Open dataset of civil-service logical-reasoning questions (~8,700); a converter is wired up and 1,000+ questions already imported.</span></p>
+        </article>
+        <article class="src">
+          <h4>GAOKAO-Bench<span>GitHub 开源数据集</span></h4>
+          <p><span data-lang="zh">2010–2022 高考真题集；已导入高考数学真题 50 题、高考物理真题 50 题，均带真题解析。</span>
+          <span data-lang="en">2010–2022 gaokao papers; 50 real math questions and 50 real physics questions imported, each with its official-style analysis.</span></p>
+        </article>
+        <article class="src">
+          <h4>CMMLU<span>大学学科评测集</span></h4>
+          <p><span data-lang="zh">已映射 6 个学科：高等数学、大学物理、计算机综合、机器学习、考研政治，logical 并入行测逻辑真题（按题干去重）。</span>
+          <span data-lang="en">Six subjects mapped in: calculus, college physics, CS fundamentals, machine learning and postgrad politics, with logical merged into the civil-service logic type (deduplicated by stem).</span></p>
+        </article>
+        <article class="src">
+          <h4><span data-lang="zh">自建样例卷与演示种子</span><span data-lang="en">Self-built papers &amp; seeds</span></h4>
+          <p><span data-lang="zh">考研、四六级、行测、高等数学、数据结构、大学生竞赛、软考架构师等科目的自建模拟卷与演示种子题。</span>
+          <span data-lang="en">Hand-built mock papers and demo seed questions across postgrad entrance, CET, civil service, calculus, data structures, student contests and the software-architect exam.</span></p>
+        </article>
+      </div>
+    </div>
+
+    <div class="cat-chips reveal" aria-label="首页分类导航 / Home category navigation">
+      <span class="cat-chip first"><span data-lang="zh">首页分类导航</span><span data-lang="en">Home categories</span></span>
+      <span class="cat-chip">🎓 <span data-lang="zh">考研</span><span data-lang="en">Postgrad</span></span>
+      <span class="cat-chip">🌍 <span data-lang="zh">四六级</span><span data-lang="en">CET-4/6</span></span>
+      <span class="cat-chip">🏛️ <span data-lang="zh">考公考编</span><span data-lang="en">Civil service</span></span>
+      <span class="cat-chip">🏆 <span data-lang="zh">学科竞赛</span><span data-lang="en">Contests</span></span>
+      <span class="cat-chip">✏️ <span data-lang="zh">高考</span><span data-lang="en">Gaokao</span></span>
+      <span class="cat-chip">📖 <span data-lang="zh">期末冲刺</span><span data-lang="en">Finals</span></span>
+      <span class="cat-chip">💼 <span data-lang="zh">考证</span><span data-lang="en">Certificates</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 开发状态 ================= -->
+<section id="status" aria-labelledby="status-h">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker"><span data-lang="zh">开发状态</span><span data-lang="en">Status</span></span>
+      <h2 id="status-h">
+        <span data-lang="zh">诚实的开发状态</span>
+        <span data-lang="en">An honest look at where it stands</span>
+      </h2>
+      <p class="lede">
+        <span data-lang="zh">以下是仓库提交记录（2026 年 10 月）能印证的真实进度，以及接下来的计划。</span>
+        <span data-lang="en">Real progress as evidenced by the repository's commit history (October 2026), plus what comes next.</span>
+      </p>
+    </div>
+
+    <div class="status-banner reveal">
+      <span class="em" aria-hidden="true">🔧</span>
+      <p>
+        <span data-lang="zh"><b>本项目仍在本地开发与联调阶段，小程序尚未发布上线。</b>当前在后端服务 + 微信开发者工具中跑通全部功能；本页为项目介绍页，会随开发进度更新。</span>
+        <span data-lang="en"><b>The project is still in local development and integration — the mini program has not been released.</b> All features currently run against a local backend inside WeChat DevTools; this page is the project's introduction and will be updated as work progresses.</span>
+      </p>
+    </div>
+
+    <div class="status-grid">
+      <div class="timeline reveal" aria-label="进度时间线 / Progress timeline">
+        <div class="tl-item">
+          <span class="tl-date">10-02</span>
+          <h4><span data-lang="zh">全栈基线</span><span data-lang="en">Full-stack baseline</span></h4>
+          <p><span data-lang="zh">FastAPI 后端流水线 + 小程序三个页面，端到端冒烟自检通过。</span>
+          <span data-lang="en">FastAPI pipeline backend + three mini-program pages, with the end-to-end smoke test passing.</span></p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">10-02</span>
+          <h4><span data-lang="zh">富文本渲染</span><span data-lang="en">Rich rendering</span></h4>
+          <p><span data-lang="zh">接入 towxml 渲染题干与详解，LaTeX 离线转 Unicode，Markdown 完整排版。</span>
+          <span data-lang="en">towxml integrated for stems and analyses, LaTeX converted offline to Unicode, full Markdown layout.</span></p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">10-04</span>
+          <h4><span data-lang="zh">全考种覆盖</span><span data-lang="en">Full exam-type coverage</span></h4>
+          <p><span data-lang="zh">新增 8 考种 84 题样例卷，首页按分类关键词自动归类的考种导航上线。</span>
+          <span data-lang="en">Sample papers for 8 more subjects (84 questions) and keyword-based category navigation on the home page.</span></p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">10-04</span>
+          <h4><span data-lang="zh">真题数据供给</span><span data-lang="en">Real-question supply</span></h4>
+          <p><span data-lang="zh">接入 LogiQA 数据集转换器，并沉淀了一份真题获取渠道指南（官方 / 开源数据集 / 社区）。</span>
+          <span data-lang="en">LogiQA dataset converter connected, plus a written sourcing guide (official / open datasets / community channels).</span></p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">10-04</span>
+          <h4><span data-lang="zh">UI 与导出升级</span><span data-lang="en">UI &amp; export upgrade</span></h4>
+          <p><span data-lang="zh">三页设计系统 token 化重做（配色 / 卡片 / 选项 / 导航），新增 PDF 试卷导出（中文字体内嵌）。</span>
+          <span data-lang="en">All three pages restyled on a tokenized design system (colors, cards, options, nav), and PDF paper export added with an embedded Chinese font.</span></p>
+        </div>
+        <div class="tl-item now">
+          <span class="tl-date"><span data-lang="zh">当前</span><span data-lang="en">Now</span></span>
+          <h4><span data-lang="zh">本地开发与联调中</span><span data-lang="en">In local development</span></h4>
+          <p><span data-lang="zh">题库已积累 16 考种 1452 题；继续打磨体验、扩充题库，为上线做准备。</span>
+          <span data-lang="en">The bank has grown to 16 exam types and 1,452 questions; polishing experience and expanding content while preparing for release.</span></p>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <h3 class="side-h"><span data-lang="zh">接下来的计划</span><span data-lang="en">What's next</span></h3>
+        <div class="plan-list">
+          <div class="plan">
+            <h4><span class="ico" aria-hidden="true">🗺️</span><span data-lang="zh">间隔重复复习调度</span><span data-lang="en">Spaced-repetition scheduling</span></h4>
+            <p><span data-lang="zh">引入 SM-2 / FSRS 算法（参考 open-spaced-repetition 开源实现），按遗忘曲线自动安排每日错题复习队列。</span>
+            <span data-lang="en">Adopt SM-2 / FSRS (following the open-spaced-repetition implementations) to schedule a daily wrong-question review queue along the forgetting curve.</span></p>
+          </div>
+          <div class="plan">
+            <h4><span class="ico" aria-hidden="true">🗺️</span><span data-lang="zh">更多开源数据集</span><span data-lang="en">More open datasets</span></h4>
+            <p><span data-lang="zh">按渠道指南陆续接入 LogiQA 2.0（中英双语 ~15k 题）、AGIEval、RACE、C-Eval 等数据集。</span>
+            <span data-lang="en">Following the sourcing guide: LogiQA 2.0 (bilingual, ~15k), AGIEval, RACE, C-Eval and more.</span></p>
+          </div>
+          <div class="plan">
+            <h4><span class="ico" aria-hidden="true">🗺️</span><span data-lang="zh">上线发布</span><span data-lang="en">Public release</span></h4>
+            <p><span data-lang="zh">真实 LLM 模式的服务化部署、域名与 HTTPS，以及小程序提审发布。</span>
+            <span data-lang="en">Production deployment for real-LLM mode, domain and HTTPS, then submitting the mini program for review and release.</span></p>
+          </div>
+        </div>
+        <h3 class="side-h"><span data-lang="zh">已知边界</span><span data-lang="en">Known boundaries</span></h3>
+        <div class="bound-list">
+          <div class="bound">
+            <b><span data-lang="zh">简答题不自动判分</span><span data-lang="en">Essays are not auto-graded</span></b>
+            <span data-lang="zh">提交后直接展示参考答案与解析，供自评；不写入答题记录与错题本。</span>
+            <span data-lang="en">Reference answers and analyses are shown for self-assessment; essays don't enter records or the wrong book.</span>
+          </div>
+          <div class="bound">
+            <b><span data-lang="zh">扫描件 PDF 暂不支持</span><span data-lang="en">Scanned PDFs not supported yet</span></b>
+            <span data-lang="zh">图片型扫描试卷需要 OCR，超出当前范围；文字版 .pdf / .txt / .md 均可导入。</span>
+            <span data-lang="en">Image-only scans need OCR, which is out of scope today; text-based .pdf / .txt / .md all import fine.</span>
+          </div>
+          <div class="bound">
+            <b><span data-lang="zh">Mock 盲测的边界</span><span data-lang="en">What the mock blind test proves</span></b>
+            <span data-lang="zh">Mock 模式的盲测由确定性规则通过，验证的是闭环机制本身；真实模型能力以接入真实 LLM 后为准。</span>
+            <span data-lang="en">In mock mode the blind test passes via deterministic rules — it proves the loop, not the model; real capability is only meaningful once a real LLM is attached.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 技术栈 ================= -->
+<section class="tech" aria-labelledby="tech-h">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker"><span data-lang="zh">技术栈</span><span data-lang="en">Tech stack</span></span>
+      <h2 id="tech-h"><span data-lang="zh">一套朴素可靠的技术选型</span><span data-lang="en">A deliberately boring, dependable stack</span></h2>
+    </div>
+    <div class="tech-row reveal">
+      <h4><span data-lang="zh">后端</span><span data-lang="en">Backend</span></h4>
+      <div class="chips">
+        <span class="chip">Python 3.10+</span><span class="chip">FastAPI</span><span class="chip">SQLite</span><span class="chip">SQLAlchemy</span><span class="chip">Pydantic v2</span><span class="chip">httpx</span><span class="chip">pymupdf</span><span class="chip">json-repair</span><span class="chip">reportlab</span>
+      </div>
+    </div>
+    <div class="tech-row reveal">
+      <h4><span data-lang="zh">小程序</span><span data-lang="en">Mini program</span></h4>
+      <div class="chips">
+        <span class="chip"><span data-lang="zh">微信原生 WXML / WXSS / JS</span><span data-lang="en">Native WXML / WXSS / JS</span></span><span class="chip">towxml 3</span><span class="chip"><span data-lang="zh">LaTeX → Unicode 离线转换</span><span data-lang="en">Offline LaTeX → Unicode</span></span>
+      </div>
+    </div>
+    <div class="tech-row reveal">
+      <h4><span data-lang="zh">质量保障</span><span data-lang="en">Quality</span></h4>
+      <div class="chips">
+        <span class="chip">smoke_test.py <span data-lang="zh">端到端冒烟自检</span><span data-lang="en">end-to-end smoke test</span></span>
+        <span class="chip">tests/rich_smoke.js <span data-lang="zh">渲染层冒烟测试</span><span data-lang="en">render-layer smoke test</span></span>
+        <span class="chip"><span data-lang="zh">独立测试库</span><span data-lang="en">isolated test database</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <div class="foot-brand">
+      <span class="brand-mark">EF</span>
+      <b>ExamFlow</b>
+      <small><span data-lang="zh">资料小程序 · 开发中</span><span data-lang="en">Mini Program · In development</span></small>
+    </div>
+    <p class="foot-desc">
+      <span data-lang="zh">本页为纯静态项目介绍页，内容依据仓库 README、docs 文档与本地题库实测数据（2026-10-24）整理。小程序仍在开发中，敬请期待。</span>
+      <span data-lang="en">A purely static project page, compiled from the repository's README, docs and live reads of the local question bank (2026-10-24). The mini program is still in development — stay tuned.</span>
+    </p>
+    <p class="foot-made">Made with AI · 2026</p>
+  </div>
+</footer>
+
+<script>
+/* ============ 中英双语切换 ============ */
+var I18N_META = {
+  zh: {
+    title: "ExamFlow 资料小程序 · AI 考培刷题，开发中",
+    desc: "ExamFlow 是一款开发中的微信考培刷题小程序：试卷自动切片入库、AI 变造命题、双盲校验、错题本与一键举一反三，题库已覆盖 16 个考种、1452 道题。",
+    toggleLabel: "切换到英文 / Switch to English",
+    langAttr: "zh-CN"
+  },
+  en: {
+    title: "ExamFlow · AI Exam Practice Mini Program (In Development)",
+    desc: "ExamFlow is a WeChat mini program for exam practice, now in development: automated paper slicing, AI-derived questions with double-blind verification, a wrong-question book and one-tap similar questions — 1,452 questions across 16 exam types.",
+    toggleLabel: "切换到中文 / Switch to Chinese",
+    langAttr: "en"
+  }
+};
+
+function applyLang(lang) {
+  var next = (lang === "en") ? "en" : "zh";
+  var meta = I18N_META[next];
+  var root = document.documentElement;
+  root.setAttribute("data-lang", next);
+  root.setAttribute("lang", meta.langAttr);
+  document.title = meta.title;
+  var desc = document.querySelector('meta[name="description"]');
+  if (desc) desc.setAttribute("content", meta.desc);
+  var btn = document.getElementById("langToggle");
+  if (btn) {
+    btn.textContent = (next === "zh") ? "EN" : "中文";
+    btn.setAttribute("aria-label", meta.toggleLabel);
+  }
+}
+
+function switchLang(lang) {
+  var next = lang || (document.documentElement.getAttribute("data-lang") === "zh" ? "en" : "zh");
+  applyLang(next);
+  try { localStorage.setItem("examflow-site-lang", next); } catch (e) { /* 本地存储不可用时静默跳过 */ }
+}
+
+(function initLang() {
+  var saved = null;
+  try { saved = localStorage.getItem("examflow-site-lang"); } catch (e) { saved = null; }
+  applyLang(saved === "en" ? "en" : "zh");
+})();
+
+/* ============ 进场动画（尊重减少动态偏好；含多级兜底，任何环境下内容必然可见） ============ */
+(function initReveal() {
+  document.documentElement.classList.add("js");
+  var els = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
+  if (els.length === 0) return;
+  function markIn(el) { if (!el.classList.contains("in")) el.classList.add("in"); }
+  function nearViewport(el) {
+    var r = el.getBoundingClientRect();
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    return r.top < vh * 0.95 && r.bottom > -40;
+  }
+  function sweep() { for (var i = 0; i < els.length; i++) if (nearViewport(els[i])) markIn(els[i]); }
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].isIntersecting) { markIn(entries[i].target); io.unobserve(entries[i].target); }
+      }
+    }, { threshold: 0.12 });
+    for (var j = 0; j < els.length; j++) io.observe(els[j]);
+  }
+  /* 兜底一：滚动 / 视口变化时手动扫描（部分内嵌 WebView 会节流 IntersectionObserver 回调） */
+  var scheduled = false;
+  function onScroll() {
+    if (scheduled) return;
+    scheduled = true;
+    window.requestAnimationFrame(function () { scheduled = false; sweep(); });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) sweep(); });
+  /* 兜底二：无论如何，3 秒后全部显示，保证内容可见优先于动画 */
+  setTimeout(function () { for (var k = 0; k < els.length; k++) markIn(els[k]); }, 3000);
+})();
+</script>
+</body>
+</html>
