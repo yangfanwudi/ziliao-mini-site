@@ -431,6 +431,32 @@ footer{background:#101828;color:#98A2B3;padding:52px 0 40px}
   border-top:1px solid #1F2937;padding-top:24px;
 }
 
+/* ============ 页脚反馈入口 + 右下角悬浮反馈按钮（→ feedback.html） ============ */
+.foot-links{margin:0 auto 26px;font-size:14px}
+.foot-links a{
+  display:inline-flex;align-items:center;gap:7px;
+  color:#C7D2FE;border:1px solid #3730A3;border-radius:999px;
+  padding:7px 18px;font-weight:600;font-size:13.5px;
+  transition:all .15s ease;
+}
+.foot-links a:hover{color:#fff;border-color:#6366F1;background:rgba(99,102,241,.18);text-decoration:none}
+.fb-fab{
+  position:fixed;right:18px;bottom:18px;z-index:60;
+  display:inline-flex;align-items:center;gap:7px;
+  background:linear-gradient(135deg,var(--brand) 0%,var(--brand-2) 100%);
+  color:#fff;border-radius:999px;padding:11px 17px;
+  font-size:14px;font-weight:600;
+  box-shadow:var(--shadow-brand);
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.fb-fab:hover{color:#fff;text-decoration:none;transform:translateY(-2px);box-shadow:0 14px 32px rgba(79,70,229,.4)}
+.fb-fab:active{transform:translateY(0)}
+.fb-fab svg{flex:none}
+@media (max-width:720px){
+  .fb-fab{right:14px;bottom:14px;padding:10px 15px;font-size:13.5px}
+  footer{padding-bottom:96px}
+}
+
 /* ============ 进场动画（仅 JS 可用时） ============ */
 html.js .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
 html.js .reveal.in{opacity:1;transform:none}
@@ -1001,9 +1027,17 @@ html.js .reveal.in{opacity:1;transform:none}
       <span data-lang="zh">本页为纯静态项目介绍页，内容依据仓库 README、docs 文档与本地题库实测数据（2026-10-24）整理。小程序仍在开发中，敬请期待。</span>
       <span data-lang="en">A purely static project page, compiled from the repository's README, docs and live reads of the local question bank (2026-10-24). The mini program is still in development — stay tuned.</span>
     </p>
+    <!-- 反馈入口：feedback.html -->
+    <p class="foot-links"><a href="feedback.html">反馈 Feedback</a></p>
     <p class="foot-made">Made with AI · 2026</p>
   </div>
 </footer>
+
+<!-- 右下角悬浮反馈按钮：fixed 定位，不遮挡正文内容，移动端缩小但仍可点按 -->
+<a class="fb-fab" href="feedback.html" aria-label="反馈 / Feedback">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  <span data-lang="zh">反馈</span><span data-lang="en">Feedback</span>
+</a>
 
 <script>
 /* ============ 中英双语切换 ============ */
